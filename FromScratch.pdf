@@ -1,0 +1,88 @@
+%PDF-1.4
+% Example PDF - Open with Chrome.exe because Acrobat needs the xref table
+% Ben Mullan (c) 2023
+
+
+% Root Object
+1 0 obj
+	<<
+		/Type		/Catalog
+		/Pages <<
+			/Type	/Pages
+			/Kids	[2 0 R]
+			/Count	1
+		>>
+	>>
+endobj
+
+
+% Page 1
+2 0 obj
+	<<
+		/Type		/Page
+		/MediaBox	[0 0 640 480]
+		/Resources	3 0 R
+		/Contents	4 0 R
+	>>
+endobj
+
+
+% Page 1 Resources
+3 0 obj
+	<<
+		/ProcSet [/PDF]
+		/Font <<
+			/F0 <<
+				/Type		/Font
+				/Subtype	/Type1
+				/BaseFont	/Helvetica
+			>>
+		>>
+	>>
+endobj
+
+
+% Page 1 Contents
+4 0 obj
+	<<
+		/Length 51
+	>>
+	stream
+		
+		BT						% Begin Text
+		/F0 24 Tf				% Select Font 0, in Size 24
+		260 240 Td				% Move to this point (relative co-ordinates; ←x→ ↑y↓ from bottom-left corner)
+		(Hello, World) Tj		% Draw Text
+		ET						% End Text
+		
+		% Description Text
+		BT /F0 12 Tf 200 210 Td (Open in a text-editor, to see the source-code!) Tj ET
+		
+	endstream
+endobj
+
+
+% Document Info
+5 0 obj
+	<<
+		% Misc.
+		/Title			(PDF From Scratch)
+		/Author			(Ben Mullan)
+		/Subject		(Something)
+		/Keywords		(Something)
+		/Creator		(Someone)
+		/Producer		(notepad.exe)
+		
+		% Date Format:	(D:YYYYMMDDHHmmSSOHH'mm')
+		/CreationDate	(D:20231003112001+01'00')
+		/ModDate		(D:20231003112001+01'00')
+	>>
+endobj
+
+
+% ↓ First section to be read ↓
+trailer
+<<
+	/Root	1 0 R
+	/Info	5 0 R
+>>
