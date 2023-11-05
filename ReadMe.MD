@@ -1,8 +1,8 @@
-#Bits and Bobs!
+# Bits and Bobs!
 (Misc. useful programming files and resources) 
 
 ### MullNet Utilities (Binaries)
-A collection of useful programming, maths, art, and file-system tools!
+A collection of useful programming, maths, art, and file-system tools! See [MNUtils Index](https://github.com/BenMullan/BitsAndBobs/blob/main/Utilities!/_Index.txt).
 
 | Program                	| Use                                                                                    	|
 |------------------------	|----------------------------------------------------------------------------------------	|
@@ -49,4 +49,4 @@ A collection of useful programming, maths, art, and file-system tools!
 E.g. Use RunHidden.exe to run SaveScreenshot or PlayWav as invisible processes via PsExec on a remote computer.
 Much of the source for these binaries can be found in [BenMullan/MullNetUtilities](https://github.com/BenMullan/MullNetUtilities)
 
-Ben Mullan (c) 2023
+_Ben Mullan (c) 2023_
