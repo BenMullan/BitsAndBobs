@@ -2,7 +2,7 @@
 (Misc. useful programming files and resources) 
 
 ### MullNet Utilities (Binaries)
-A collection of useful programming, maths, art, and file-system tools! See [MNUtils Index](https://github.com/BenMullan/BitsAndBobs/blob/main/Utilities!/_Index.txt).
+A collection of useful programming, maths, art, and file-system tools! Download ['ere](https://github.com/BenMullan/BitsAndBobs/blob/main/Utilities!/).
 
 <br/><img src="https://raw.githubusercontent.com/BenMullan/BitsAndBobs/main/Utilities!/_MNUtils.png" width="100%" /><br/>
 
