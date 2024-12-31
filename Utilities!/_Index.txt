@@ -11,7 +11,9 @@ CLAOutputter.exe		[CLI] Echoes command-line arguments back, to check what they w
 CMDLaunchUtility.exe	Launches CMD.exe on [Win] + [C]
 ColourScreen.exe		[CLI/GUI] Fills the screen with the specified solid colour (for Projectors)
 ConsoleInfo.exe			[CLI] Displays configuraiton infomation for the current Win32 Console
+disk-search.cmd			[CLI] Searches entire hard-disk for a file pattern eg "*.txt"
 Doorman.exe				[CLI] (v2!) Shows CLAs, stdout, stderr, and exit-codes for command-line processes
+→ bdm.cmd				[CLI] Batch-file version of Doorman.exe; doesn't impeed non-linebreak-terminated stdout-put
 EmptyFolderDel.exe		Finds empty and/or RegEx-matching folders in the FileSystem
 ExcelRender.exe			Renders an image onto an Excel Spreadsheet!
 GetNTPTime.exe			[CLI] E.g. GetNTPTime.exe /NTPServer:Time.Windows.com
@@ -35,6 +37,7 @@ SaveScreenshot.exe		[CLI/GUI] Saves a screenshot, optionally repeating every few
 SendKeys.exe			[CLI/GUI] Emulates keystrokes. Run: "SendKeys.exe /?" for usage.
 SendKeysGUI.exe			A comprehensive GUI version of SendKeys, supporting export to vbs
 ShowExitCode.exe		[CLI] Runs the shell command in the CLAs, reporting process info afterwards
+→ sec.cmd				[CLI] Batch-file version of ShowExitCode.exe; doesn't impeed non-linebreak-terminated stdout-put
 Sleep.exe				Puts the computer into the ACPI sleep power state, if supported
 SQLMaster.exe			Tiny version of SQL Server Managment Studio!
 SudokuMistry.exe		Sudoku Game (Written for a friend)

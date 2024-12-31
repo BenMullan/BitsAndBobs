@@ -14,7 +14,7 @@ A collection of useful programming, maths, art, and file-system tools! See [MNUt
 | CMDLaunchUtility.exe   	| Launches CMD.exe on [Win] + [C]                                                        	|
 | ColourScreen.exe       	| [CLI/GUI] Fills the screen with the specified solid colour (for Projectors)            	|
 | ConsoleInfo.exe        	| [CLI] Displays configuraiton infomation for the current Win32 Console                  	|
-| Doorman.exe				| [CLI] (v2!) Shows CLAs, stdout, stderr, and exit-codes for command-line processes			|
+| Doorman.exe            	| [CLI] (v2!) Shows CLAs, stdout, stderr, and exit-codes for command-line processes      	|
 | EmptyFolderDel.exe     	| Finds empty and/or RegEx-matching folders in the FileSystem                            	|
 | ExcelRender.exe        	| Renders an image onto an Excel Spreadsheet!                                            	|
 | GetNTPTime.exe         	| [CLI] E.g. GetNTPTime.exe /NTPServer:Time.Windows.com                                  	|
@@ -48,8 +48,11 @@ A collection of useful programming, maths, art, and file-system tools! See [MNUt
 | Win32\MaxVol           	| Instantly sets the system volume to 100%                                               	|
 | Win32\MouseGone32      	| Slightly less effective version of the .NET MouseGone.exe (above)                      	|
 | Win32\MouseWindowCap32 	| Saves a screenshot of the Window the mouse-pointer is currently over.                  	|
+| bdm.cmd                	| [CLI] Batch-file version of Doorman.exe; doesn't impeed non-linebreak-terminated stdout	|
+| sec.cmd                	| [CLI] Batch-file version of ShowExitCode.exe; doesn't impeed non-linebreak-terminated...	|
+| disk-search.cmd        	| [CLI] Searches entire hard-disk for a file pattern eg "*.txt"                          	|
 
-E.g. Use RunHidden.exe to run SaveScreenshot or PlayWav as invisible processes via PsExec on a remote computer.
-Much of the source for these binaries can be found in [BenMullan/MullNetUtilities](https://github.com/BenMullan/MullNetUtilities)
+E.g. Use `RunHidden.exe` to run SaveScreenshot or PlayWav as invisible processes via PsExec on a remote computer.
+Parts of the source for these binaries is in [BenMullan/MullNetUtilities](https://github.com/BenMullan/MullNetUtilities)
 
-_Ben Mullan (c) 2023_
+_Ben Mullan (c) 2025_
