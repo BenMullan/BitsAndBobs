@@ -9,7 +9,7 @@ rem Author:	Ben Mullan 2024
 	for /f %%a in ('echo prompt $E ^| cmd') do set "esc=%%a"
 
 :print-executable-path
-	for /f %%o in ('where %1') do set "exePath=%%o"
+	for /f "delims=" %%o in ('where "%~1"') do set "exePath=%%o"
 	echo %esc%[36mtarget: %exePath%%esc%[0m
 
 :print-command-line-args
