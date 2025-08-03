@@ -9,6 +9,7 @@
 
 ### MullNet Utilities (Binaries)
 A collection of useful programming, maths, art, and file-system tools! See [MNUtils Index](https://github.com/BenMullan/BitsAndBobs/blob/main/Utilities!/_Index.txt).
+Download [here](https://github.com/BenMullan/BitsAndBobs/releases/download/MNUtils/BM-MullNet-Utilities-Dec-2024.zip) (v2024).
 
 <br/><img src="https://raw.githubusercontent.com/BenMullan/BitsAndBobs/main/Utilities!/_MNUtils.png" width="100%" /><br/>
 
