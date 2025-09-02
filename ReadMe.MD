@@ -50,7 +50,7 @@ Download [here](https://github.com/BenMullan/BitsAndBobs/releases/download/MNUti
 | SQLMaster.exe          	| Tiny version of SQL Server Management Studio!                                           	|
 | SudokuMistry.exe       	| Sudoku Game (Written for a friend)                                                     	|
 | WebcamView.exe         	| Simple Video Device previewer. Use AMCAP for more complex version.                     	|
-| WebGet.exe             	| [CLI] Simple alternative to cURL. E.g. WebGet http://benm.eu5.org/ds                   	|
+| WebGet.exe             	| [CLI] Simple alternative to cURL. E.g. WebGet http://theoldnet.com/                   	|
 | WindowShots.exe        	| Saves screenshots of all open Windows into a folder in the current directory           	|
 | Win32\Beep32           	| Calls Win32 MessageBeep() function                                                     	|
 | Win32\MaxVol           	| Instantly sets the system volume to 100%                                               	|
