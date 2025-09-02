@@ -29,6 +29,7 @@ MicroHTTP.exe			[CLI] Useful HTTP Server; See MicroHTTP.exe /?
 MNKeyShortcuts.exe		Enables several useful Keyboard Shortcuts: [Win] + C/N/I/S/Shift+N
 MouseGone.exe			...Take a guess
 MsgBoxGen.exe			MessageBox designer. Supports export to VBS.
+mvsys.exe				[GUI] Like Windows' "mmsys.cpl" tool, but for video-devices; shows previews & properties dialogs
 PlayWav.exe				[CLI/AudioSession] Plays a WAV in the background, optionally repeating. See /?.
 PolygonCircles.exe		Polygon Artwork creator; try an obscure side length, and scroll away...
 RubiksCube.exe			Visualiser for a 6-face Rubik's Cube. Supports cube serialisation.
@@ -49,6 +50,7 @@ Win32\Beep32			Calls Win32 MessageBeep() function
 Win32\MaxVol			Instantly sets the system volume to 100%
 Win32\MouseGone32		Slightly less effective version of the .NET MouseGone.exe (above)
 Win32\MouseWindowCap32	Saves a screenshot of the Window the mouse-pointer is currently over.
+Win32\VideoPreview		Pure C++ Win32 webcam/video-device viewer
 
 E.g. Use RunHidden.exe to run SaveScreenshot or PlayWav as invisible processes via PsExec on a remote computer.
 

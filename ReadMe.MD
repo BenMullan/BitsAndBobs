@@ -20,7 +20,7 @@ Download [here](https://github.com/BenMullan/BitsAndBobs/releases/download/MNUti
 | CLAOutputter.exe       	| [CLI] Echoes command-line arguments back, to check what they were                      	|
 | CMDLaunchUtility.exe   	| Launches CMD.exe on [Win] + [C]                                                        	|
 | ColourScreen.exe       	| [CLI/GUI] Fills the screen with the specified solid colour (for Projectors)            	|
-| ConsoleInfo.exe        	| [CLI] Displays configuraiton infomation for the current Win32 Console                  	|
+| ConsoleInfo.exe        	| [CLI] Displays configuration information for the current Win32 Console                  	|
 | Doorman.exe            	| [CLI] (v2!) Shows CLAs, stdout, stderr, and exit-codes for command-line processes      	|
 | EmptyFolderDel.exe     	| Finds empty and/or RegEx-matching folders in the FileSystem                            	|
 | ExcelRender.exe        	| Renders an image onto an Excel Spreadsheet!                                            	|
@@ -37,16 +37,17 @@ Download [here](https://github.com/BenMullan/BitsAndBobs/releases/download/MNUti
 | MNKeyShortcuts.exe     	| Enables several useful Keyboard Shortcuts: [Win] + C/N/I/S/Shift+N                     	|
 | MouseGone.exe          	| ...Take a guess                                                                        	|
 | MsgBoxGen.exe          	| MessageBox designer. Supports export to VBS.                                           	|
+| mvsys.exe             	| [GUI] Like Windows' "mmsys.cpl" tool, but for video-devices; 📷 dialogs + previews.   	|
 | PlayWav.exe            	| [CLI/AudioSession] Plays a WAV in the background, optionally repeating. See /?.        	|
 | PolygonCircles.exe     	| Polygon Artwork creator; try an obscure side length, and scroll away...                	|
-| RubiksCube.exe         	| Visualiser for a 6-face Rubik's Cube. Supports cube serialisation.                     	|
-| RunHidden.exe          	| [CLI] Creates a process without a GUI. See [Details] tab in explorer Propities.        	|
+| RubiksCube.exe         	| Visualiser for a 6-face Rubik's Cube. Supports cube serialization.                     	|
+| RunHidden.exe          	| [CLI] Creates a process without a GUI. See [Details] tab in explorer Properties.        	|
 | SaveScreenshot.exe     	| [CLI/GUI] Saves a screenshot, optionally repeating every few seconds. See /?.          	|
 | SendKeys.exe           	| [CLI/GUI] Emulates keystrokes. Run: "SendKeys.exe /?" for usage.                       	|
 | SendKeysGUI.exe        	| A comprehensive GUI version of SendKeys, supporting export to vbs                      	|
 | ShowExitCode.exe       	| [CLI] Runs the shell command in the CLAs, reporting process info afterwards            	|
 | Sleep.exe              	| Puts the computer into the ACPI sleep power state, if supported                        	|
-| SQLMaster.exe          	| Tiny version of SQL Server Managment Studio!                                           	|
+| SQLMaster.exe          	| Tiny version of SQL Server Management Studio!                                           	|
 | SudokuMistry.exe       	| Sudoku Game (Written for a friend)                                                     	|
 | WebcamView.exe         	| Simple Video Device previewer. Use AMCAP for more complex version.                     	|
 | WebGet.exe             	| [CLI] Simple alternative to cURL. E.g. WebGet http://benm.eu5.org/ds                   	|
@@ -55,7 +56,9 @@ Download [here](https://github.com/BenMullan/BitsAndBobs/releases/download/MNUti
 | Win32\MaxVol           	| Instantly sets the system volume to 100%                                               	|
 | Win32\MouseGone32      	| Slightly less effective version of the .NET MouseGone.exe (above)                      	|
 | Win32\MouseWindowCap32 	| Saves a screenshot of the Window the mouse-pointer is currently over.                  	|
-| bdm.cmd                	| [CLI] Batch-file version of Doorman.exe; doesn't impeed non-linebreak-terminated stdout	|
+| Win32\VideoPreview    	| Pure C++ Win32 webcam/video-device viewer                                             	|
+
+| bdm.cmd                	| [CLI] Batch-file version of Doorman.exe; doesn't impede non-linebreak-terminated stdout	|
 | sec.cmd                	| [CLI] Batch-file version of ShowExitCode.exe; doesn't impeed non-linebreak-terminated...	|
 | disk-search.cmd        	| [CLI] Searches entire hard-disk for a file pattern eg "*.txt"                          	|
 
