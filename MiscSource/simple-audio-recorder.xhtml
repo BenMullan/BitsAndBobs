@@ -1,0 +1,502 @@
+<!--
+	File:	simple-audio-recorder.xhtml - demo for recording microphone audio
+	Author:	GPT4 + Ben Mullan 2025
+-->
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="application/xhtml+xml; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Simple XHTML Audio Recorder</title>
+    <style type="text/css">
+      :root {
+        --bg: #0f172a;
+        --panel: #111827;
+        --text: #e5e7eb;
+        --muted: #9ca3af;
+        --accent: #60a5fa;
+        --accent-2: #34d399;
+        --danger: #f87171;
+        --border: #374151;
+      }
+      * { box-sizing: border-box; }
+      html, body {
+        margin: 0; padding: 0;
+        background: var(--bg); color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        line-height: 1.45;
+      }
+      .wrap {
+        max-width: 820px; margin: 32px auto; padding: 16px;
+      }
+      h1 {
+        font-size: 1.4rem; margin: 0 0 12px 0; font-weight: 600;
+      }
+      p { color: var(--muted); margin: 0 0 16px 0; }
+      .panel {
+        background: var(--panel);
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        padding: 16px;
+      }
+      .row {
+        display: flex; flex-wrap: wrap; gap: 12px; align-items: center;
+        margin-bottom: 12px;
+      }
+      label { font-size: 0.95rem; color: var(--text); }
+      select, button {
+        background: #0b1220; color: var(--text);
+        border: 1px solid var(--border);
+        border-radius: 8px; padding: 10px 12px; font-size: 0.95rem;
+      }
+      select:disabled, button:disabled { opacity: 0.55; cursor: not-allowed; }
+      button.primary { border-color: #2563eb; }
+      button.record { background: #1a2235; border-color: var(--accent); }
+      button.stop { background: #1a2235; border-color: var(--danger); }
+      button.play { background: #1a2235; border-color: var(--accent-2); }
+      .stats {
+        display: grid; grid-template-columns: repeat(3, minmax(120px, 1fr));
+        gap: 8px; margin-top: 8px;
+      }
+      .stat {
+        background: #0b1220; border: 1px solid var(--border); border-radius: 8px;
+        padding: 10px;
+      }
+      .stat b { display: block; font-size: 0.8rem; color: var(--muted); margin-bottom: 4px; }
+      canvas {
+        display: block; width: 100%; height: 140px;
+        background: #0b1220; border: 1px solid var(--border); border-radius: 8px;
+      }
+      .audio {
+        display: flex; gap: 12px; align-items: center; margin-top: 10px;
+        background: #0b1220; border: 1px solid var(--border); border-radius: 8px; padding: 8px 10px;
+      }
+      audio { width: 100%; }
+      pre#debug {
+        margin-top: 10px; background: #0b1220; border: 1px solid var(--border);
+        border-radius: 8px; padding: 10px; overflow-x: auto; color: #cbd5e1;
+      }
+      small.tip { color: var(--muted); display: block; margin-top: 6px; }
+      .footer { color: var(--muted); font-size: 0.85rem; margin-top: 18px; }
+      .error { color: #fecaca; }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <h1>Simple XHTML Audio Recorder</h1>
+      <p>Record audio from your microphone, visualize it live, then play it back. You can also choose an input device and see stream details.</p>
+
+      <div class="panel" role="region" aria-label="Recorder controls">
+        <div class="row">
+          <label for="deviceSelect">Input device:</label>
+          <select id="deviceSelect" title="Audio input device"></select>
+          <button id="refreshBtn" class="primary" type="button" title="Refresh devices">Refresh</button>
+        </div>
+
+        <div class="row">
+          <button id="recordBtn" class="record" type="button" title="Start recording">Record</button>
+          <button id="stopBtn" class="stop" type="button" disabled="disabled" title="Stop recording">Stop</button>
+          <button id="playBtn" class="play" type="button" disabled="disabled" title="Play the last recording">Play</button>
+        </div>
+
+        <canvas id="scope" width="800" height="160">Waveform visualization</canvas>
+
+        <div class="stats">
+          <div class="stat"><b>Status</b><span id="status">Idle</span></div>
+          <div class="stat"><b>Buffer</b><span id="bufferStat">0 chunks • 0 bytes</span></div>
+          <div class="stat"><b>Elapsed</b><span id="elapsed">0.00 s</span></div>
+        </div>
+
+        <div class="audio">
+          <audio id="player" controls="controls"></audio>
+        </div>
+
+        <small class="tip">Tip: If device names are blank, click “Record” once to grant permission; then “Refresh” to reveal labels.</small>
+
+        <pre id="debug" aria-live="polite"></pre>
+        <div id="error" class="error"></div>
+
+        <div class="footer">
+          Note: MediaRecorder support varies. If one format fails, this page falls back to another common audio type.
+        </div>
+      </div>
+    </div>
+
+    <script type="application/javascript">
+    //<![CDATA[
+    (function () {
+      "use strict";
+
+      // Elements
+      var deviceSelect = document.getElementById("deviceSelect");
+      var refreshBtn = document.getElementById("refreshBtn");
+      var recordBtn = document.getElementById("recordBtn");
+      var stopBtn = document.getElementById("stopBtn");
+      var playBtn = document.getElementById("playBtn");
+      var player = document.getElementById("player");
+      var statusEl = document.getElementById("status");
+      var bufferStatEl = document.getElementById("bufferStat");
+      var elapsedEl = document.getElementById("elapsed");
+      var debugEl = document.getElementById("debug");
+      var errorEl = document.getElementById("error");
+      var scope = document.getElementById("scope");
+      var ctx2d = scope.getContext("2d");
+
+      // State
+      var stream = null;
+      var track = null;
+      var mediaRecorder = null;
+      var chunks = [];
+      var chunkBytes = 0;
+      var recordingStartMs = 0;
+      var rafId = 0;
+      var ac = null; // AudioContext
+      var analyser = null;
+      var sourceNode = null;
+      var drawActive = false;
+      var selectedDeviceId = "";
+
+      // Choose a recording MIME type that the browser supports
+      function chooseMimeType() {
+        var candidates = [
+          "audio/webm;codecs=opus",
+          "audio/webm",
+          "audio/mp4",
+          "audio/ogg;codecs=opus",
+          "audio/ogg"
+        ];
+        for (var i = 0; i < candidates.length; i++) {
+          var t = candidates[i];
+          if (typeof MediaRecorder !== "undefined" && MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t)) {
+            return t;
+          }
+        }
+        return ""; // Let the browser pick default
+      }
+
+      var chosenMime = chooseMimeType();
+
+      // UI helpers
+      function setStatus(text) { statusEl.textContent = text; }
+      function setError(msg) { errorEl.textContent = msg || ""; }
+      function updateBufferStat() {
+        bufferStatEl.textContent = chunks.length + " chunks \u2022 " + chunkBytes + " bytes";
+      }
+      function updateElapsed() {
+        if (recordingStartMs) {
+          var ms = Date.now() - recordingStartMs;
+          elapsedEl.textContent = (ms / 1000).toFixed(2) + " s";
+        }
+      }
+      function setButtons(recording) {
+        recordBtn.disabled = recording;
+        stopBtn.disabled = !recording;
+      }
+      function clearVisualization() {
+        ctx2d.fillStyle = "#0b1220";
+        ctx2d.fillRect(0, 0, scope.width, scope.height);
+        ctx2d.strokeStyle = "#374151";
+        ctx2d.strokeRect(0.5, 0.5, scope.width - 1, scope.height - 1);
+      }
+
+      // Visualization via AnalyserNode
+      function startVisualization(streamArg) {
+        if (!window.AudioContext && !window.webkitAudioContext) return;
+        ac = new (window.AudioContext || window.webkitAudioContext)();
+        analyser = ac.createAnalyser();
+        analyser.fftSize = 2048;
+        sourceNode = ac.createMediaStreamSource(streamArg);
+        sourceNode.connect(analyser);
+        drawActive = true;
+        drawWaveform();
+      }
+      function stopVisualization() {
+        drawActive = false;
+        if (rafId) { cancelAnimationFrame(rafId); rafId = 0; }
+        if (sourceNode) { try { sourceNode.disconnect(); } catch (e) {} sourceNode = null; }
+        if (analyser) { try { analyser.disconnect(); } catch (e) {} analyser = null; }
+        if (ac) { try { ac.close(); } catch (e) {} ac = null; }
+        clearVisualization();
+      }
+      function drawWaveform() {
+        if (!drawActive || !analyser) return;
+        var bufferLength = analyser.fftSize;
+        var dataArray = new Uint8Array(bufferLength);
+        analyser.getByteTimeDomainData(dataArray);
+
+        // Resize canvas backing store to CSS size (once)
+        var cssW = scope.clientWidth;
+        var cssH = scope.clientHeight;
+        if (scope.width !== cssW || scope.height !== cssH) {
+          scope.width = cssW;
+          scope.height = cssH;
+        }
+
+        ctx2d.fillStyle = "#0b1220";
+        ctx2d.fillRect(0, 0, scope.width, scope.height);
+
+        ctx2d.lineWidth = 2;
+        ctx2d.strokeStyle = "#60a5fa";
+        ctx2d.beginPath();
+
+        var sliceWidth = scope.width * 1.0 / bufferLength;
+        var x = 0;
+        for (var i = 0; i < bufferLength; i++) {
+          var v = dataArray[i] / 128.0;
+          var y = v * scope.height / 2;
+          if (i === 0) ctx2d.moveTo(x, y);
+          else ctx2d.lineTo(x, y);
+          x += sliceWidth;
+        }
+        ctx2d.lineTo(scope.width, scope.height / 2);
+        ctx2d.stroke();
+
+        // Subtle baseline
+        ctx2d.strokeStyle = "#374151";
+        ctx2d.lineWidth = 1;
+        ctx2d.beginPath();
+        ctx2d.moveTo(0, scope.height / 2);
+        ctx2d.lineTo(scope.width, scope.height / 2);
+        ctx2d.stroke();
+
+        rafId = requestAnimationFrame(drawWaveform);
+      }
+
+      // Device enumeration
+      function populateDevices() {
+        if (!navigator.mediaDevices || !navigator.mediaDevices.enumerateDevices) return;
+        return navigator.mediaDevices.enumerateDevices().then(function (devices) {
+          var audioInputs = [];
+          for (var i = 0; i < devices.length; i++) {
+            if (devices[i].kind === "audioinput") audioInputs.push(devices[i]);
+          }
+          while (deviceSelect.firstChild) deviceSelect.removeChild(deviceSelect.firstChild);
+          for (var j = 0; j < audioInputs.length; j++) {
+            var d = audioInputs[j];
+            var opt = document.createElement("option");
+            opt.value = d.deviceId;
+            opt.textContent = d.label || ("Microphone " + (j + 1));
+            deviceSelect.appendChild(opt);
+          }
+          if (audioInputs.length === 0) {
+            var opt2 = document.createElement("option");
+            opt2.value = "";
+            opt2.textContent = "No audio inputs found";
+            deviceSelect.appendChild(opt2);
+            deviceSelect.disabled = true;
+          } else {
+            deviceSelect.disabled = false;
+          }
+          // Preserve selection if possible
+          if (selectedDeviceId) {
+            for (var k = 0; k < deviceSelect.options.length; k++) {
+              if (deviceSelect.options[k].value === selectedDeviceId) {
+                deviceSelect.selectedIndex = k;
+                break;
+              }
+            }
+          } else if (deviceSelect.options.length > 0) {
+            selectedDeviceId = deviceSelect.value;
+          }
+        })["catch"](function (err) {
+          setError("Device enumeration failed: " + err.message);
+        });
+      }
+
+      // Start recording
+      function startRecording() {
+        setError("");
+        chunks = [];
+        chunkBytes = 0;
+        updateBufferStat();
+        elapsedEl.textContent = "0.00 s";
+
+        // Stop any existing tracks
+        stopStream();
+
+        var constraints = { audio: { echoCancellation: true } };
+        if (selectedDeviceId) {
+          constraints.audio.deviceId = { exact: selectedDeviceId };
+        }
+
+        navigator.mediaDevices.getUserMedia(constraints).then(function (s) {
+          stream = s;
+          track = stream.getAudioTracks()[0];
+
+          // Refresh device labels now that we (likely) have permission
+          populateDevices();
+
+          // Debug info
+          var info = buildDebugInfo(stream, constraints);
+          debugEl.textContent = info;
+
+          // Visualization
+          clearVisualization();
+          startVisualization(stream);
+
+          // MediaRecorder
+          try {
+            mediaRecorder = chosenMime ? new MediaRecorder(stream, { mimeType: chosenMime }) : new MediaRecorder(stream);
+          } catch (e) {
+            setError("MediaRecorder init failed: " + e.message);
+            stopStream();
+            return;
+          }
+
+          mediaRecorder.ondataavailable = function (ev) {
+            if (ev && ev.data && ev.data.size > 0) {
+              chunks.push(ev.data);
+              chunkBytes += ev.data.size;
+              updateBufferStat();
+            }
+          };
+          mediaRecorder.onstop = function () {
+            setStatus("Stopped");
+            setButtons(false);
+            stopVisualization();
+
+            // Build blob and prepare for playback
+            var type = mediaRecorder.mimeType || chosenMime || "audio/webm";
+            var blob = new Blob(chunks, { type: type });
+            var url = URL.createObjectURL(blob);
+            player.src = url;
+            playBtn.disabled = false;
+          };
+          mediaRecorder.onerror = function (e) {
+            setError("Recorder error: " + (e && e.error ? e.error.message : "unknown"));
+          };
+
+          recordingStartMs = Date.now();
+          setStatus("Recording...");
+          setButtons(true);
+          playBtn.disabled = true;
+
+          // Request periodic data to visualize buffer growth
+          try {
+            mediaRecorder.start(250); // ms timeslice
+          } catch (e2) {
+            setError("MediaRecorder.start failed: " + e2.message);
+            stopRecording(); // cleanup
+            return;
+          }
+
+          // Elapsed timer
+          tickElapsed();
+        })["catch"](function (err) {
+          setError("Microphone access failed: " + err.message);
+          setStatus("Idle");
+          setButtons(false);
+          stopVisualization();
+        });
+      }
+
+      function tickElapsed() {
+        if (!recordingStartMs) return;
+        updateElapsed();
+        window.setTimeout(tickElapsed, 100);
+      }
+
+      // Stop recording
+      function stopRecording() {
+        try {
+          if (mediaRecorder && mediaRecorder.state !== "inactive") {
+            mediaRecorder.stop();
+          }
+        } catch (e) {
+          // ignore
+        }
+        recordingStartMs = 0;
+        stopStream();
+      }
+
+      function stopStream() {
+        if (stream) {
+          var tracks = stream.getTracks();
+          for (var i = 0; i < tracks.length; i++) {
+            try { tracks[i].stop(); } catch (e) {}
+          }
+        }
+        stream = null;
+        track = null;
+      }
+
+      // Debug builder
+      function buildDebugInfo(streamArg, constraints) {
+        var lines = [];
+        lines.push("Selected deviceId: " + (selectedDeviceId || "(default)"));
+        if (deviceSelect && deviceSelect.options && deviceSelect.selectedIndex >= 0) {
+          var opt = deviceSelect.options[deviceSelect.selectedIndex];
+          lines.push("Selected label: " + (opt ? opt.textContent : ""));
+        }
+
+        if (streamArg) {
+          var audioTracks = streamArg.getAudioTracks();
+          if (audioTracks.length > 0) {
+            var t = audioTracks[0];
+            var st = t.getSettings ? t.getSettings() : {};
+            lines.push("Track label: " + (t.label || ""));
+            lines.push("Track settings:");
+            lines.push("  deviceId: " + (st.deviceId || ""));
+            lines.push("  sampleRate: " + (st.sampleRate || "(n/a)"));
+            lines.push("  channelCount: " + (st.channelCount || "(n/a)"));
+            lines.push("  latency: " + (st.latency || "(n/a)"));
+            lines.push("  noiseSuppression: " + (st.noiseSuppression !== undefined ? st.noiseSuppression : "(n/a)"));
+            lines.push("  echoCancellation: " + (st.echoCancellation !== undefined ? st.echoCancellation : "(n/a)"));
+            lines.push("  autoGainControl: " + (st.autoGainControl !== undefined ? st.autoGainControl : "(n/a)"));
+          }
+        }
+
+        if (ac) {
+          lines.push("AudioContext sampleRate: " + ac.sampleRate);
+          lines.push("Analyser fftSize: " + analyser.fftSize);
+        }
+
+        lines.push("Constraints: " + safeJson(constraints));
+        lines.push("Chosen mimeType: " + (chosenMime || "(browser default)"));
+        return lines.join("\n");
+      }
+
+      function safeJson(obj) {
+        try { return JSON.stringify(obj); } catch (e) { return String(obj); }
+      }
+
+      // Events
+      recordBtn.addEventListener("click", function () { startRecording(); });
+      stopBtn.addEventListener("click", function () { stopRecording(); });
+      playBtn.addEventListener("click", function () {
+        try { player.currentTime = 0; player.play(); } catch (e) {}
+      });
+      refreshBtn.addEventListener("click", function () {
+        populateDevices();
+      });
+      deviceSelect.addEventListener("change", function () {
+        selectedDeviceId = deviceSelect.value;
+        debugEl.textContent = "Selected deviceId: " + (selectedDeviceId || "(default)");
+      });
+
+      // Init
+      function init() {
+        clearVisualization();
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          setError("This browser does not support getUserMedia.");
+          recordBtn.disabled = true;
+          stopBtn.disabled = true;
+          playBtn.disabled = true;
+          deviceSelect.disabled = true;
+          return;
+        }
+        populateDevices();
+      }
+
+      window.addEventListener("load", init);
+      window.addEventListener("beforeunload", function () {
+        stopRecording();
+        stopVisualization();
+      });
+    })();
+    //]]>
+    </script>
+  </body>
+</html>
