@@ -1,0 +1,12 @@
+{
+  "id": "bucket-002",
+  "name": "test-bucket",
+  "items": [
+    {
+      "id": "1757337201411xybo1rscd",
+      "type": "text",
+      "content": "http://localhost:3000",
+      "timestamp": "2025-09-08T13:13:21.411Z"
+    }
+  ]
+}

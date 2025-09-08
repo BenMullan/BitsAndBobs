@@ -1,0 +1,25 @@
+{
+  "name": "paste-it",
+  "version": "1.0.0",
+  "description": "A simple paste sharing service with real-time updates",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "paste",
+    "sharing",
+    "clipboard",
+    "real-time"
+  ],
+  "author": "",
+  "license": "MIT"
+}
