@@ -65,4 +65,8 @@ Download [here](https://github.com/BenMullan/BitsAndBobs/releases/download/MNUti
 E.g. Use `RunHidden.exe` to run SaveScreenshot or PlayWav as invisible processes via PsExec on a remote computer.
 Parts of the source for these binaries is in [BenMullan/MullNetUtilities](https://github.com/BenMullan/MullNetUtilities)
 
-_Ben Mullan (c) 2025_
+### Misc
+- [mini-music](https://drive.google.com/file/d/1TCK79vc2Gq8g_mtpjlPskzLMOgBOr95n/view)
+- [the-pin--and--tmws](https://drive.google.com/drive/folders/1Ep52TAw9XhBPCxLhln62V1RAPJhKdv4w)
+
+_Ben Mullan (c) 2026_
